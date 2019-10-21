@@ -2,6 +2,9 @@
 --import Data.List
 import System.IO 
 import System.IO.Error
+import System.Directory
+
+
 
 data QA = Q String QA QA
         | A String
@@ -9,6 +12,12 @@ data QA = Q String QA QA
 
 testTree = Q "Is she from Europe?" (A "Marie Curie") (A "Marilyn Monroe")
 testString = show testTree
+
+
+
+errorTest :: IO Bool
+errorTest = doesFileExist path
+
 
 writeQA:: QA -> IO ()
 writeQA x = writeFile path (show x)
@@ -26,7 +35,20 @@ path = "famus.qa"
 
 --yesNoQuestion :: String -> IO Bool
 
---main :: IO ()
+main :: IO ()
+main = do qa <- if(!errorTest)
+		  error "file Does not exist dumbo"
+                else
+                  loadQA
+                  putStrLn ("Think of a famous person! I will ask you questions about her?!?!?!?")
+	
 
 
 --play :: QA -> IO QA
+--play qa = 
+--          do is <- 
+
+
+
+
+
