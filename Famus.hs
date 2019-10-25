@@ -12,9 +12,9 @@ question q = do putStrLn q
 
 yesNoQuestion :: String -> IO Bool
 yesNoQuestion q = do auto <- question q
-                     if (auto == "yes")
+                     if auto == "yes"
                        then return True
-                     else if (auto == "no")
+                     else if auto == "no"
                        then return False
                      else yesNoQuestion q
 
@@ -35,7 +35,7 @@ getQA = do exist <- doesFileExist path
 main :: IO ()
 main = do
   qa <- getQA
-  putStrLn ("Think of a famous person! I will ask you questions about her.")
+  putStrLn "Think of a famous person! I will ask you questions about her."
   qa' <- play qa
   saveQA qa'
 
