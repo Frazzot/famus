@@ -1,4 +1,5 @@
 import System.Directory
+import System.IO
 
 data QA = Q String QA QA
         | A String
@@ -7,19 +8,19 @@ data QA = Q String QA QA
 startTree = Q "Is she from Europe?" (A "Marie Curie") (A "Marilyn Monroe")
 
 question :: String -> IO String
-question q = do putStrLn q
+question q = do putStr (q ++ " ")
+                hFlush stdout
                 getLine
 
 yesNoQuestion :: String -> IO Bool
-yesNoQuestion q = do auto <- question q
-                     if auto == "yes"
-                       then return True
-                     else if auto == "no"
-                       then return False
-                     else yesNoQuestion q
+yesNoQuestion q = do
+  answer <- question q
+  case answer of "yes" -> return True
+                 "no"  -> return False
+                 _     -> yesNoQuestion "Answer yes or no!"
 
 saveQA :: QA -> IO ()
-saveQA x = writeFile path (show x)
+saveQA x = writeFile path $ show x
 
 loadQA :: IO QA
 loadQA = read <$> readFile path
@@ -49,12 +50,12 @@ play (Q s qyes qno) = do
             return (Q s qyes t)
 
 play (A s) = do
-  ans <- yesNoQuestion( "is the person you're thinking about " ++ s )
-  if ans
-    then do putStrLn "in your face AI is taking over"
+  yes <- yesNoQuestion ("is the person you're thinking about " ++ s ++ "?")
+  if yes
+    then do putStrLn "in your face! AI is taking over!"
             return (A s)
     else do name <- question "I don´t belive you! Who was it!?"
             quest <- question ("Give me a question for which the answer for "
                               ++ name ++ " is yes and the answer for "
-                              ++ s ++ " is no")
+                              ++ s ++ " is no.")
             return (Q quest (A name) (A s))
