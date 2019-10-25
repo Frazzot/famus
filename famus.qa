@@ -1,1 +1,1 @@
-Q "Is she from Europe?" (Q "is it a fotva\DEL\DEL\DEL" (A "zlatan") (A "Marie Curie")) (A "Marilyn Monroe")
+Q "Is she from Europe?" (Q "is it a soccer player?" (A "Zlatan") (Q "Is she from Sweden?" (A "Pippi L\229ngstrump") (A "Marie Curie"))) (Q "Is her husbands name William?" (A "Hillary Clinton") (A "Marilyn Monroe"))
