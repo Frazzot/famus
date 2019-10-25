@@ -13,7 +13,17 @@ data QA = Q String QA QA
 testTree = Q "Is she from Europe?" (A "Marie Curie") (A "Marilyn Monroe")
 testString = show testTree
 
+question :: String -> IO String
+question q = do putStrLn q
+                getLine  
 
+yesNoQuestion :: String -> IO Bool
+yesNoQuestion q = do auto <- question q
+                     if (auto == "yes")
+                       then do return True
+                     else if (auto == "no")
+                       then do return False
+                     else do yesNoQuestion q
 
 errorTest :: IO Bool
 errorTest = doesFileExist path
@@ -24,29 +34,40 @@ writeQA x = writeFile path (show x)
             
 
 loadQA:: IO QA
-loadQA = do s <- readFile path
-            return(read s)
+loadQA = read <$> readFile path
  
 
 path :: FilePath
 path = "famus.qa"
 
---question :: String -> IO String
 
---yesNoQuestion :: String -> IO Bool
+
 
 main :: IO ()
-main = do qa <- if(!errorTest)
-		  error "file Does not exist dumbo"
-                else
-                  loadQA
-                  putStrLn ("Think of a famous person! I will ask you questions about her?!?!?!?")
-	
+main = do exist <- errorTest
+          if (not exist)
+            then do error "file Does not exist"
+                    return () 
+           else do
+                    loadQA
+                    putStrLn ("Think of a famous person! I will ask you questions about her?!?!?!?")
+            
 
+play :: QA -> IO QA
+play (Q s qyes qno) = do yes <- yesNoQuestion s 
+                         if yes then do t <- play qyes
+                                        return (Q s t qno)
+                         else do t <- play qno
+                                 return  (Q s qyes t) 
 
---play :: QA -> IO QA
---play qa = 
---          do is <- 
+play (A s) = do ans <- yesNoQuestion( "is the person you're thinking about " ++ s )
+                if ans then do putStrLn "in your face AI is taking over" 
+                               return (A s)
+                else do name <- question "Just curious: Who was your famous person?" 
+                        quest <- question( "Give me a question for which the answer for " 
+                                           ++ name ++ " is yes and the answer for " ++ s ++ " is no")
+                        return (Q quest (A name) (A s))
+          
 
 
 
