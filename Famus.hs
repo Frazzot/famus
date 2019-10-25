@@ -13,6 +13,7 @@ question q = do putStr (q ++ " ")
                 hFlush stdout
                 getLine
 
+-- Takes a string and returns an IO Bool to represent the answer of the question
 yesNoQuestion :: String -> IO Bool
 yesNoQuestion q = do
   answer <- question q
@@ -23,17 +24,21 @@ yesNoQuestion q = do
 saveQA :: QA -> IO ()
 saveQA x = writeFile path $ show x
 
+-- Basically maps read infix on readFile path
 loadQA :: IO QA
 loadQA = read <$> readFile path
 
+-- Returns the path to the file
 path :: FilePath
 path = "famus.qa"
 
+-- Calls loadQA if file path exists, otherwise it returns the defaultQA
 getQA :: IO QA
 getQA = do exist <- doesFileExist path
            if exist then loadQA
              else return defaultQA
 
+-- The main function of the game, handles when other functions should be called and the progression of the game
 main :: IO ()
 main = do
   qa <- getQA
@@ -43,7 +48,6 @@ main = do
   again <- yesNoQuestion "Play again?"
   if again then main
     else putStrLn "OK! Bye pesky human!"
-
 
 play :: QA -> IO QA
 play (Q s qyes qno) = do
