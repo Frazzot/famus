@@ -1,1 +1,1 @@
-Q "Is she from Europe?" (A "Marie Curie") (A "Marilyn Monroe")
+Q "Is she from Europe?" (Q "is it a fotva\DEL\DEL\DEL" (A "zlatan") (A "Marie Curie")) (A "Marilyn Monroe")
